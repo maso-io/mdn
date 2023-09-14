@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <title>Object basics: Task 2</title>
+    <style>
+      p {
+        color: purple;
+        margin: 0.5em 0;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+    </style>
+    <link rel="stylesheet" href="../styles.css" />
+  </head>
+
+  <body>
+
+    <section class="preview">
+
+    </section>
+
+  </body>
+  <script>
+    let bandInfo;
+
+    // Add your code here
+    const band = {
+        name: 'twc',
+        nationality: 'south africa',
+        genre: 'hip-hop',
+        members: 14,
+        formed: 2017,
+        split: 2019,
+        albums: [
+            {
+                name: 'FMTYAOY',
+                released: 2017
+            },
+            {
+                name: 'And I\'m Only 21',
+                released: 2018
+            }
+        ],
+        bio(){
+            return `The band ${this.name} was originally founded in ${this.formed}, with ${this.members}
+             members. The bend went on to release ${this.albums.length} albums, ${this.albums[0].name} and ${this.albums[1].name}
+             before the members of the band split of in ${this.split}.`
+        }
+    }
+    bandInfo = band.bio();
+
+
+    // Don't edit the code below here!
+
+    const section = document.querySelector('section');
+    let para1 = document.createElement('p');
+    para1.textContent = bandInfo;
+    section.appendChild(para1);
+  </script>
+
+</html>
