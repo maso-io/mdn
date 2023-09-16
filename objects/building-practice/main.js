@@ -3,15 +3,21 @@ const width = (canvas.width = window.innerWidth);
 const height = (canvas.height = window.innerHeight);
 const ctx = canvas.getContext("2d");
 
-class Ball {
-
-    constructor(posX, posY, velX, velY, color, radius) {
+class Shape {
+    constructor(posX, posY, velX, velY) {
         this.posX = posX;
         this.posY = posY;
         this.velX = velX;
         this.velY = velY;
+    }
+}
+class Ball extends Shape {
+
+    constructor(posX, posY, velX, velY, color, radius) {
+        super(posX, posY, velX, velY);
         this.color = color;
         this.radius = radius;
+        this.exists = true;
     }
 
     degToRad(degrees) {
@@ -49,13 +55,75 @@ class Ball {
     collisionDetect(balls) {
         // check if current instance of ball has collided with the given ball obj
         for (const ball of balls) {
-            if (this !== ball) {
+            if (this !== ball && ball.exists) {
                 const dx = this.posX - ball.posX;
                 const dy = this.posY - ball.posY;
                 const distance = Math.sqrt((dx * dx) + (dy * dy));
 
                 if (this.radius >= distance) {
                     this.color = (ball.color = rbg());
+                }
+            }
+        }
+    }
+}
+
+class EvilCircle extends Shape {
+    constructor(posX, posY) {
+        super(posX, posY, 20, 20);
+        this.color = "white";
+        this.radius = 10;
+
+        window.addEventListener("keydown", (e) => {
+            switch (e.key) {
+                case 'w':
+                    this.posY -= this.velY;
+                    break;
+                case 'a':
+                    this.posX -= this.velX;
+                    break;
+                case 's':
+                    this.posY += this.velY;
+                case 'd':
+                    this.posX += this.velX;
+            }
+        })
+    }
+
+    draw() {
+        ctx.beginPath();
+        ctx.strokeStyle = this.color;
+        ctx.lineWidth = 4;
+        ctx.arc(this.posX, this.posY, this.radius, 0, 2 * Math.PI);
+        ctx.stroke();
+    }
+
+    checkBounds() {
+        if (this.posX + this.radius >= width) {
+            this.posX -= (0.5 * this.radius)
+        }
+        if (this.posX - this.radius <= 0) {
+            this.posX += (0.5 * this.radius)
+        }
+        if (this.posY - this.radius <= 0) {
+            this.posY += (0.5 * this.radius)
+        }
+        if (this.posY + this.radius >= height) {
+            this.posY -= (0.5 * this.radius)
+        }
+    }
+
+    collisionDetect(balls) {
+        for (const ball of balls) {
+            if (ball.exists) {
+                const dx = this.posX - ball.posX;
+                const dy = this.posY - ball.posY;
+                const distance = Math.sqrt((dx * dx) + (dy * dy));
+
+                if (this.radius + ball.radius >= distance) {
+                    ball.exists = false;
+                    score++;
+                    myP.textContent = `Ball Count: ${balls.length - score}`;
                 }
             }
         }
@@ -76,7 +144,11 @@ rbg = () => {
     return `rgb(${num1}, ${num2}, ${num3})`;
 }
 
+const myP = document.querySelector("p");
+const evilCircle = new EvilCircle(50, 50);
 const balls = [];
+let score = 0;
+
 
 while (balls.length < 25) {
     // create an array of 25 ball objects
@@ -89,8 +161,9 @@ while (balls.length < 25) {
         rbg(),
         radius
     )
-    //ball.draw();
+    ball.draw();
     balls.push(ball);
+    myP.textContent = `Ball Count: ${balls.length - score}`;
 }
 
 function loop() {
@@ -99,9 +172,15 @@ function loop() {
     ctx.fillRect(0, 0, width, height);
 
     for (const ball of balls) {
-        ball.draw();
-        ball.update();
-        ball.collisionDetect(balls);
+        if (ball.exists) {
+            ball.draw();
+            ball.update();
+            ball.collisionDetect(balls);
+
+            evilCircle.draw();
+            evilCircle.checkBounds();
+            evilCircle.collisionDetect(balls);
+        }
     }
 
     requestAnimationFrame(loop);
