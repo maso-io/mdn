@@ -69,12 +69,23 @@ class Ball extends Shape {
 }
 
 class EvilCircle extends Shape {
+
     constructor(posX, posY) {
         super(posX, posY, 20, 20);
         this.color = "white";
         this.radius = 10;
+        this.pressed = false;
 
-        window.addEventListener("keydown", (e) => {
+        document.addEventListener("mousedown", () => { this.pressed = true });
+        document.addEventListener("mouseup", () => { this.pressed = false });
+        canvas.addEventListener("mousemove", (e) => {
+            if (this.pressed) {
+                this.posX = e.pageX;
+                this.posY = e.pageY;
+            }
+        })
+
+        window.addEventListener("mouse", (e) => {
             switch (e.key) {
                 case 'w':
                     this.posY -= this.velY;
