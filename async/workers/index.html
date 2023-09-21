@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>dedicated workers</title>
+    <script defer src="main.js"></script>
+    <style>
+        textarea {
+            display: block;
+            margin: 1rem 0;
+        }
+
+        div {
+            display: inline-block;
+            width: 500px;
+            height: auto;
+        }
+    </style>
+</head>
+
+<body>
+    <label for="quota">Number of primes to generate: </label>
+    <input type="text" id="quota" name="quota" value="1000">
+
+    <button id="generate">generate</button>
+    <button id="reload">reload</button>
+
+    <textarea id="user-input" cols="60" rows="5">
+    To test the responsiveness of the web page while it generates...
+    </textarea>
+
+    <div id="output"></div>
+</body>
+
+</html>

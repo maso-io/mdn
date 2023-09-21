@@ -156,10 +156,14 @@ rbg = () => {
 }
 
 const myP = document.querySelector("p");
+const btn = document.querySelector("button");
 const evilCircle = new EvilCircle(50, 50);
 const balls = [];
 let score = 0;
 
+btn.addEventListener("click", () => {
+    document.location.reload();
+})
 
 while (balls.length < 25) {
     // create an array of 25 ball objects

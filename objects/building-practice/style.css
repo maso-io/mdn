@@ -32,3 +32,11 @@ p {
     right: 5px;
     color: #aaa;
 }
+
+button {
+    position: absolute;
+    margin: 0;
+    top: 55px;
+    right: 5px;
+    color: #19c2b9;
+}
